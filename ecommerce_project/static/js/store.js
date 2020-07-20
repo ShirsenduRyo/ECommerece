@@ -10,13 +10,38 @@ window.onload=function(){
 			console.log('USER:', user)
 
 			if (user == 'AnonymousUser'){
-				console.log(productId, action)
+				addCookieItem(productId, action)
 			}else{
 				updateUserOrder(productId, action)
 			}
 		})
 	}
 }
+function addCookieItem(productId, action){
+	console.log("Unauthenticated User")
+
+	if(action == "add"){
+		if(cart[productId] == undefined){
+			cart[productId] = { "quantity":1}
+		}
+		else{
+			cart[productId]["quantity"] += 1
+		}
+	}
+
+	if(action == "remove"){
+		if(cart[productId]["quantity"] <= 1){
+			console.log("Item should be deleted")
+			delete cart[productId]
+		}
+		else{
+			cart[productId]["quantity"] -= 1
+		}
+	}
+	console.log("cart:",cart)
+	document.cookie = "cart=" + JSON.stringify(cart)  + ";domain=;path=/"
+}
+
 
 function updateUserOrder(productId, action){
 	console.log('User is authenticated, sending data...')
